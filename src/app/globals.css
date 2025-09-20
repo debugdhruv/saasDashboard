@@ -1,4 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
+@import "tw-animate-css";
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Your ONLY color - #1c1c1c at different opacities */
+  --primary-5: rgba(28, 28, 28, 0.05);
+  --primary-10: rgba(28, 28, 28, 0.10);
+  --primary-20: rgba(28, 28, 28, 0.20);
+  --primary-40: rgba(28, 28, 28, 0.40);
+  --primary-100: #1c1c1c;
+}
+
+.dark {
+  /* In dark mode, invert to white with same opacities */
+  --primary-5: rgba(255, 255, 255, 0.05);
+  --primary-10: rgba(255, 255, 255, 0.10);
+  --primary-20: rgba(255, 255, 255, 0.20);
+  --primary-40: rgba(255, 255, 255, 0.40);
+  --primary-100: #ffffff;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* @import "tailwindcss";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
@@ -119,4 +161,4 @@
   body {
     @apply bg-background text-foreground;
   }
-}
+} */
