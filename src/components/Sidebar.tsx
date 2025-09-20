@@ -19,10 +19,10 @@ type NavSection = {
 
 const navSections: NavSection[] = [
   {
-    title: "",
+    title: "Favorites",
     items: [
-      { name: "Overview", href: "/", isCustomDot: true, isClickable: true },
-      { name: "Projects", href: "/", isCustomDot: true, isClickable: true },
+      { name: "Overview", href: "/", isCustomDot: true, isClickable: false },
+      { name: "Projects", href: "/", isCustomDot: true, isClickable: false },
     ],
   },
   {
@@ -63,6 +63,16 @@ export default function Sidebar() {
   const [openMenus, setOpenMenus] = useState<string[]>([]);
   const [arrowStates, setArrowStates] = useState<Record<string, boolean>>({});
   const [activeTab, setActiveTab] = useState<"Favorites" | "Recently">("Favorites");
+  const [isDarkMode] = useState(false); //setIsDarkMode lagalena 
+
+  const getIconPath = (iconPath: string) => {
+    if (!iconPath) return iconPath;
+    if (isDarkMode) {
+      const fileName = iconPath.split('/').pop();
+      return `/dark/${fileName}`;
+    }
+    return iconPath;
+  };
 
   const toggleMenu = (name: string) => {
     setOpenMenus((prev) =>
@@ -146,24 +156,25 @@ export default function Sidebar() {
                           // Only User Profile has actual dropdown functionality
                           if (item.children) {
                             toggleMenu(item.name);
-                          } else {
-                            // Other items just toggle arrow and selection
+                          } else if (item.isClickable) {
+                            // Other clickable items toggle arrow and selection
                             if (!item.isCustomDot) {
                               toggleArrow(item.name);
                             }
                             handleItemClick(item.name, item.isClickable);
                           }
+                          // Non-clickable items (Favorites Overview/Projects) do nothing on click
                         }}
                         className={clsx(
                           "w-full flex items-center gap-2 px-2 py-2 text-gray-700 dark:text-gray-300 rounded-md",
-                          item.isClickable && "hover:bg-gray-100 dark:hover:bg-gray-800",
+                          "hover:bg-gray-100 dark:hover:bg-gray-800", // Always show hover for all items
                           isActive && item.isClickable && "bg-gray-100 dark:bg-gray-800 font-medium text-black dark:text-white"
                         )}
                       >
                         {/* Only show arrows for non-dot items or items with children */}
                         {(!item.isCustomDot || item.children) && (
                           <Image
-                            src={arrowDown ? "/ArrowLineDown.svg" : "/ArrowLineRight.svg"}
+                            src={getIconPath(arrowDown ? "/ArrowLineDown.svg" : "/ArrowLineRight.svg")}
                             alt={arrowDown ? "expanded" : "collapsed"}
                             width={16}
                             height={16}
@@ -179,7 +190,7 @@ export default function Sidebar() {
                           />
                         ) : item.icon ? (
                           <Image
-                            src={item.icon}
+                            src={getIconPath(item.icon)}
                             alt={item.name}
                             width={18}
                             height={18}
@@ -189,11 +200,11 @@ export default function Sidebar() {
                       </button>
                       {isActive && item.isClickable && (
                         <Image
-                          src="/Selected.svg"
+                          src={getIconPath("/Selected.svg")}
                           alt="selected"
-                          width={16}
-                          height={16}
-                          className="absolute -left-5 top-1/2 -translate-y-1/2"
+                          width={18}
+                          height={18}
+                          className="absolute -left-0 top-1/2 -translate-y-1/2"
                         />
                       )}
                     </div>
@@ -220,11 +231,11 @@ export default function Sidebar() {
                               </a>
                               {childActive && (
                                 <Image
-                                  src="/Selected.svg"
+                                  src={getIconPath("/Selected.svg")}
                                   alt="selected"
-                                  width={16}
-                                  height={16}
-                                  className="absolute -left-5 top-1/2 -translate-y-1/2"
+                                  width={18}
+                                  height={18}
+                                  className="absolute -left-0 top-1/2 -translate-y-1/2"
                                 />
                               )}
                             </li>

@@ -24,7 +24,15 @@
 body {
   font-family: 'Inter', system-ui, sans-serif;
 }
+/* globals.css */
+.dark svg {
+  filter: invert(1) brightness(0.8);
+}
 
+/* Or specific to sidebar icons */
+.dark .sidebar-icon {
+  filter: invert(1) brightness(0.8);
+}
 
 
 
