@@ -72,7 +72,7 @@ export default function TopBar({
           <div className="relative">
             <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
               <Image
-                src="/topbar/Search.svg"
+                src="/topbar/search.svg"
                 alt="Search"
                 width={14}
                 height={14}
