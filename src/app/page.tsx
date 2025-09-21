@@ -31,9 +31,9 @@ export default function HomePage() {
       } ${
         isRightSidebarOpen ? 'mr-80' : 'mr-0'
       }`}>
-        <div className="p-6">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Dashboard Content
+        <div className="pl-10 pt-4">
+          <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
+            eCommerce
           </h1>
         </div>
       </main>

@@ -85,11 +85,11 @@ export default function RightSidebar({ isRightSidebarOpen }: RightSidebarProps) 
     ];
 
     const contacts = [
-        { name: 'Kate Morrison', avatar: '/avatars/avatar10.png', bgColor: 'bg-purple-500' },
         { name: 'Natali Craig', avatar: '/avatars/avatar6.png', bgColor: 'bg-pink-500' },
         { name: 'Drew Cano', avatar: '/avatars/avatar7.png', bgColor: 'bg-red-500' },
         { name: 'Orlando Diggs', avatar: '/avatars/avatar8.png', bgColor: 'bg-yellow-500' },
         { name: 'Andi Lane', avatar: '/avatars/avatar9.png', bgColor: 'bg-gray-500' },
+        { name: 'Kate Morrison', avatar: '/avatars/avatar10.png', bgColor: 'bg-purple-500' },
         { name: 'Koray Okumus', avatar: '/avatars/avatar11.png', bgColor: 'bg-blue-500' }
     ];
 
@@ -167,7 +167,7 @@ export default function RightSidebar({ isRightSidebarOpen }: RightSidebarProps) 
                     <h4 className="text-md font-semibold text-gray-900 dark:text-white mb-4">
                         Contacts
                     </h4>
-                    <div className="space-y-3">
+                    <div className="space-y-0">
                         {contacts.map((contact, index) => (
                             <div
                                 key={index}

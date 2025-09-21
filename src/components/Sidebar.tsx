@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import clsx from "clsx";
+import Link from "next/link";
 
 type NavItem = {
   name: string;
@@ -64,7 +65,7 @@ const navSections: NavSection[] = [
 
 export default function Sidebar({ isSidebarCollapsed }: SidebarProps) {
   const [selected, setSelected] = useState<string>("Default");
-  const [openMenus, setOpenMenus] = useState<string[]>([]);
+  const [openMenus, setOpenMenus] = useState<string[]>(["User Profile"]);
   const [arrowStates, setArrowStates] = useState<Record<string, boolean>>({});
   const [activeTab, setActiveTab] = useState<"Favorites" | "Recently">("Favorites");
   const [isDarkMode] = useState(false);
@@ -94,7 +95,7 @@ export default function Sidebar({ isSidebarCollapsed }: SidebarProps) {
 
   const toggleMenu = (name: string) => {
     if (isSidebarCollapsed) return; // Don't allow dropdown in collapsed state
-    
+
     setIsAnimating(name);
     setOpenMenus((prev) =>
       prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name]
@@ -107,7 +108,7 @@ export default function Sidebar({ isSidebarCollapsed }: SidebarProps) {
 
   const toggleArrow = (name: string) => {
     if (isSidebarCollapsed) return; // Don't allow arrow toggle in collapsed state
-    
+
     setArrowStates((prev) => ({
       ...prev,
       [name]: !prev[name]
@@ -131,26 +132,28 @@ export default function Sidebar({ isSidebarCollapsed }: SidebarProps) {
       isSidebarCollapsed ? "w-16" : "w-64"
     )}>
       {/* Top Profile */}
+      <Link href={"/"}>
       <div className={clsx(
-        "flex items-center pt-4 mb-6 transition-all duration-300 ease-out",
-        isSidebarCollapsed ? "justify-center" : "gap-2 pl-4"
+        "flex cursor-pointer items-center pt-4 mb-6 transition-all duration-300 ease-out",
+        isSidebarCollapsed ? "justify-center" : "gap-3 pl-4"
       )}>
         <Image
           src="/Logo.png"
           alt="Avatar"
-          width={32}
-          height={32}
+          width={40}
+          height={40}
           className="rounded-full transition-all duration-200"
         />
-        <span 
+        <span
           className={clsx(
-            "font-medium text-[14px] text-gray-900 dark:text-white transition-all duration-150 ease-out whitespace-nowrap overflow-hidden",
-            showContent && !isSidebarCollapsed ? "opacity-100 w-auto ml-3" : "opacity-0 w-0 ml-0"
+            "font-medium tracking-wider text-[14px] text-gray-900 dark:text-white transition-all duration-150 ease-out whitespace-nowrap overflow-hidden",
+            showContent && !isSidebarCollapsed ? "opacity-100 w-auto" : "opacity-0 w-0 ml-0"
           )}
         >
           ByeWind
         </span>
       </div>
+      </Link>
 
       {/* Tabs: Favorites and Recently - only show when expanded */}
       <div className={clsx(
@@ -162,8 +165,8 @@ export default function Sidebar({ isSidebarCollapsed }: SidebarProps) {
           className={clsx(
             "text-sm font-medium mr-6 transition-all duration-300 ease-in-out",
             activeTab === "Favorites"
-              ? "text-gray-900 dark:text-white font-semibold"
-              : "text-gray-400 dark:text-gray-500"
+              ? "text-gray-600 dark:text-white"
+              : "text-gray-300 dark:text-gray-500"
           )}
         >
           Favorites
@@ -173,8 +176,8 @@ export default function Sidebar({ isSidebarCollapsed }: SidebarProps) {
           className={clsx(
             "text-sm font-medium transition-all duration-300 ease-in-out",
             activeTab === "Recently"
-              ? "text-gray-900 dark:text-white font-semibold"
-              : "text-gray-400 dark:text-gray-500"
+              ? "text-gray-600 dark:text-white"
+              : "text-gray-300 dark:text-gray-500"
           )}
         >
           Recently
@@ -188,7 +191,7 @@ export default function Sidebar({ isSidebarCollapsed }: SidebarProps) {
           if (isSidebarCollapsed && idx === 0) {
             return null;
           }
-          
+
           return (
             <div key={idx} className="animate-in slide-in-from-left-4 duration-300" style={{ animationDelay: `${idx * 100}ms` }}>
               {/* Section title - only show when expanded */}
@@ -241,7 +244,7 @@ export default function Sidebar({ isSidebarCollapsed }: SidebarProps) {
                               )}
                             />
                           )}
-                          
+
                           {/* Icon or dot */}
                           {item.isCustomDot ? (
                             <span
@@ -259,7 +262,7 @@ export default function Sidebar({ isSidebarCollapsed }: SidebarProps) {
                               className="transition-all duration-200 ease-out flex-shrink-0"
                             />
                           ) : null}
-                          
+
                           {/* Text - smooth fade out */}
                           <span className={clsx(
                             "text-sm font-medium transition-all duration-150 ease-out whitespace-nowrap overflow-hidden",
@@ -306,7 +309,7 @@ export default function Sidebar({ isSidebarCollapsed }: SidebarProps) {
                                       handleItemClick(child.name);
                                     }}
                                     className={clsx(
-                                      "block px-2 py-1 text-sm text-gray-600 dark:text-gray-400 rounded-md",
+                                      "block px-4 py-1 text-sm text-gray-600 dark:text-gray-400 rounded-md",
                                       "transition-all duration-200 ease-in-out",
                                       "hover:bg-gray-100 dark:hover:bg-gray-800",
                                       childActive && "bg-gray-100 dark:bg-gray-800 font-medium text-black dark:text-white"
