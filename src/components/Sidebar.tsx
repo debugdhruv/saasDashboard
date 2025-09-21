@@ -133,7 +133,7 @@ export default function Sidebar({ isSidebarCollapsed }: SidebarProps) {
       {/* Top Profile */}
       <div className={clsx(
         "flex items-center pt-4 mb-6 transition-all duration-300 ease-out",
-        isSidebarCollapsed ? "justify-center" : "gap-3 pl-4"
+        isSidebarCollapsed ? "justify-center" : "gap-2 pl-4"
       )}>
         <Image
           src="/Logo.png"
@@ -160,7 +160,7 @@ export default function Sidebar({ isSidebarCollapsed }: SidebarProps) {
         <button
           onClick={() => handleTabSwitch("Favorites")}
           className={clsx(
-            "text-sm font-medium mr-8 transition-all duration-300 ease-in-out",
+            "text-sm font-medium mr-6 transition-all duration-300 ease-in-out",
             activeTab === "Favorites"
               ? "text-gray-900 dark:text-white font-semibold"
               : "text-gray-400 dark:text-gray-500"
@@ -194,7 +194,7 @@ export default function Sidebar({ isSidebarCollapsed }: SidebarProps) {
               {/* Section title - only show when expanded */}
               {section.title && (
                 <h2 className={clsx(
-                  "text-[14px] font-medium text-gray-400 dark:text-gray-500 tracking-wider mb-3 transition-all duration-150 ease-out whitespace-nowrap overflow-hidden",
+                  "text-[14px] font-medium text-gray-400 dark:text-gray-500 mb-2 transition-all duration-150 ease-out whitespace-nowrap overflow-hidden",
                   showContent && !isSidebarCollapsed ? "opacity-100 h-auto" : "opacity-0 h-0"
                 )}>
                   {section.title}
@@ -205,7 +205,6 @@ export default function Sidebar({ isSidebarCollapsed }: SidebarProps) {
                   const isActive = selected === item.name;
                   const isOpen = openMenus.includes(item.name) && !isSidebarCollapsed;
                   const arrowDown = (arrowStates[item.name] || isOpen) && !isSidebarCollapsed;
-                  const isCurrentlyAnimating = isAnimating === item.name;
 
                   return (
                     <li key={item.name} className="animate-in slide-in-from-left-2 duration-200" style={{ animationDelay: `${itemIdx * 50}ms` }}>
@@ -222,10 +221,10 @@ export default function Sidebar({ isSidebarCollapsed }: SidebarProps) {
                             }
                           }}
                           className={clsx(
-                            "w-full flex items-center rounded-md transition-all duration-200 ease-in-out hover:bg-gray-100 dark:hover:bg-gray-800",
+                            "w-full h-8 flex items-center rounded-md transition-all duration-200 ease-in-out hover:bg-gray-100 dark:hover:bg-gray-800",
                             isSidebarCollapsed ? "gap-0 px-2 py-2 justify-center" : "gap-2 px-2 py-1",
                             "text-gray-700 dark:text-gray-300",
-                            isActive && item.isClickable && "bg-gray-100 dark:bg-gray-800 font-medium text-black dark:text-white"
+                            isActive && item.isClickable && "bg-gray-100 h-8 transition-transform duration-200 dark:bg-gray-800 font-medium text-black dark:text-white"
                           )}
                           title={isSidebarCollapsed ? item.name : undefined} // Show tooltip when collapsed
                         >
@@ -237,7 +236,7 @@ export default function Sidebar({ isSidebarCollapsed }: SidebarProps) {
                               width={16}
                               height={16}
                               className={clsx(
-                                "text-gray-500 dark:text-gray-400 transition-all duration-150 ease-out",
+                                "text-gray-500 dark:text-gray-400 transition-all duration-300 ease-out",
                                 showContent && !isSidebarCollapsed ? "opacity-100 w-4" : "opacity-0 w-0"
                               )}
                             />
