@@ -37,7 +37,16 @@ body {
 
 
 
+/* Add to globals.css */
+.sidebar-transition {
+  contain: layout style paint;
+  will-change: transform;
+}
 
+.main-content {
+  contain: layout style;
+  will-change: margin;
+}
 
 
 
