@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import clsx from "clsx";
 
 type NavItem = {
@@ -17,9 +17,13 @@ type NavSection = {
   items: NavItem[];
 };
 
+interface SidebarProps {
+  isSidebarCollapsed: boolean;
+}
+
 const navSections: NavSection[] = [
   {
-    title: "Favorites",
+    title: "",
     items: [
       { name: "Overview", href: "/", isCustomDot: true, isClickable: false },
       { name: "Projects", href: "/", isCustomDot: true, isClickable: false },
@@ -31,7 +35,7 @@ const navSections: NavSection[] = [
       { name: "Default", icon: "/ChartPieSlice.svg", href: "/", isClickable: true },
       { name: "eCommerce", icon: "/ShoppingBagOpen.svg", href: "/", isClickable: true },
       { name: "Projects", icon: "/FolderNotch.svg", href: "/", isClickable: true },
-      { name: "Online Courses", icon: "/Notebook.svg", href: "/", isClickable: true },
+      { name: "Online Courses", icon: "/BookOpen.svg", href: "/", isClickable: true },
     ],
   },
   {
@@ -52,18 +56,32 @@ const navSections: NavSection[] = [
       },
       { name: "Account", icon: "/IdentificationBadge.svg", href: "/", isClickable: true },
       { name: "Corporate", icon: "/UsersThree.svg", href: "/", isClickable: true },
-      { name: "Blog", icon: "/BookOpen.svg", href: "/", isClickable: true },
+      { name: "Blog", icon: "/Notebook.svg", href: "/", isClickable: true },
       { name: "Social", icon: "/ChatsTeardrop.svg", href: "/", isClickable: true },
     ],
   },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ isSidebarCollapsed }: SidebarProps) {
   const [selected, setSelected] = useState<string>("Default");
   const [openMenus, setOpenMenus] = useState<string[]>([]);
   const [arrowStates, setArrowStates] = useState<Record<string, boolean>>({});
   const [activeTab, setActiveTab] = useState<"Favorites" | "Recently">("Favorites");
-  const [isDarkMode] = useState(false); //setIsDarkMode lagalena 
+  const [isDarkMode] = useState(false);
+  const [isAnimating, setIsAnimating] = useState<string | null>(null);
+  const [showContent, setShowContent] = useState(!isSidebarCollapsed);
+
+  // Handle content visibility with delay
+  useEffect(() => {
+    if (isSidebarCollapsed) {
+      // Hide content immediately when collapsing
+      setShowContent(false);
+    } else {
+      // Show content after a small delay when expanding
+      const timer = setTimeout(() => setShowContent(true), 150);
+      return () => clearTimeout(timer);
+    }
+  }, [isSidebarCollapsed]);
 
   const getIconPath = (iconPath: string) => {
     if (!iconPath) return iconPath;
@@ -75,12 +93,21 @@ export default function Sidebar() {
   };
 
   const toggleMenu = (name: string) => {
+    if (isSidebarCollapsed) return; // Don't allow dropdown in collapsed state
+    
+    setIsAnimating(name);
     setOpenMenus((prev) =>
       prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name]
     );
+
+    setTimeout(() => {
+      setIsAnimating(null);
+    }, 300);
   };
 
   const toggleArrow = (name: string) => {
+    if (isSidebarCollapsed) return; // Don't allow arrow toggle in collapsed state
+    
     setArrowStates((prev) => ({
       ...prev,
       [name]: !prev[name]
@@ -93,26 +120,47 @@ export default function Sidebar() {
     }
   };
 
+  const handleTabSwitch = (tab: "Favorites" | "Recently") => {
+    if (isSidebarCollapsed) return; // Don't allow tab switch in collapsed state
+    setActiveTab(tab);
+  };
+
   return (
-    <aside className="fixed left-0 top-0 h-screen w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 overflow-y-auto">
+    <aside className={clsx(
+      "fixed left-0 top-0 h-screen bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300 ease-out",
+      isSidebarCollapsed ? "w-16" : "w-64"
+    )}>
       {/* Top Profile */}
-      <div className="flex items-center gap-3 p-4">
+      <div className={clsx(
+        "flex items-center pt-4 mb-6 transition-all duration-300 ease-out",
+        isSidebarCollapsed ? "justify-center" : "gap-3 pl-4"
+      )}>
         <Image
           src="/Logo.png"
           alt="Avatar"
           width={32}
           height={32}
-          className="rounded-full"
+          className="rounded-full transition-all duration-200"
         />
-        <span className="font-medium text-gray-900 dark:text-white">ByeWind</span>
+        <span 
+          className={clsx(
+            "font-medium text-[14px] text-gray-900 dark:text-white transition-all duration-150 ease-out whitespace-nowrap overflow-hidden",
+            showContent && !isSidebarCollapsed ? "opacity-100 w-auto ml-3" : "opacity-0 w-0 ml-0"
+          )}
+        >
+          ByeWind
+        </span>
       </div>
 
-      {/* Tabs: Favorites and Recently */}
-      <div className="flex px-4 pb-4">
+      {/* Tabs: Favorites and Recently - only show when expanded */}
+      <div className={clsx(
+        "flex pl-4 mb-2 transition-all duration-150 ease-out overflow-hidden",
+        showContent && !isSidebarCollapsed ? "opacity-100 h-auto" : "opacity-0 h-0"
+      )}>
         <button
-          onClick={() => setActiveTab("Favorites")}
+          onClick={() => handleTabSwitch("Favorites")}
           className={clsx(
-            "text-sm font-medium mr-8",
+            "text-sm font-medium mr-8 transition-all duration-300 ease-in-out",
             activeTab === "Favorites"
               ? "text-gray-900 dark:text-white font-semibold"
               : "text-gray-400 dark:text-gray-500"
@@ -121,9 +169,9 @@ export default function Sidebar() {
           Favorites
         </button>
         <button
-          onClick={() => setActiveTab("Recently")}
+          onClick={() => handleTabSwitch("Recently")}
           className={clsx(
-            "text-sm font-medium",
+            "text-sm font-medium transition-all duration-300 ease-in-out",
             activeTab === "Recently"
               ? "text-gray-900 dark:text-white font-semibold"
               : "text-gray-400 dark:text-gray-500"
@@ -134,121 +182,169 @@ export default function Sidebar() {
       </div>
 
       {/* Navigation */}
-      <nav className="px-4 space-y-6">
-        {navSections.map((section, idx) => (
-          <div key={idx}>
-            {section.title && (
-              <h3 className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3">
-                {section.title}
-              </h3>
-            )}
-            <ul className="space-y-1">
-              {section.items.map((item) => {
-                const isActive = selected === item.name;
-                const isOpen = openMenus.includes(item.name);
-                const arrowDown = arrowStates[item.name] || isOpen;
-                
-                return (
-                  <li key={item.name}>
-                    <div className="relative">
-                      <button
-                        onClick={() => {
-                          // Only User Profile has actual dropdown functionality
-                          if (item.children) {
-                            toggleMenu(item.name);
-                          } else if (item.isClickable) {
-                            // Other clickable items toggle arrow and selection
-                            if (!item.isCustomDot) {
-                              toggleArrow(item.name);
+      <nav className={clsx("space-y-6", isSidebarCollapsed ? "px-2" : "px-4")}>
+        {navSections.map((section, idx) => {
+          // Skip the first section (Overview/Projects) when sidebar is collapsed
+          if (isSidebarCollapsed && idx === 0) {
+            return null;
+          }
+          
+          return (
+            <div key={idx} className="animate-in slide-in-from-left-4 duration-300" style={{ animationDelay: `${idx * 100}ms` }}>
+              {/* Section title - only show when expanded */}
+              {section.title && (
+                <h2 className={clsx(
+                  "text-[14px] font-medium text-gray-400 dark:text-gray-500 tracking-wider mb-3 transition-all duration-150 ease-out whitespace-nowrap overflow-hidden",
+                  showContent && !isSidebarCollapsed ? "opacity-100 h-auto" : "opacity-0 h-0"
+                )}>
+                  {section.title}
+                </h2>
+              )}
+              <ul className="space-y-1">
+                {section.items.map((item, itemIdx) => {
+                  const isActive = selected === item.name;
+                  const isOpen = openMenus.includes(item.name) && !isSidebarCollapsed;
+                  const arrowDown = (arrowStates[item.name] || isOpen) && !isSidebarCollapsed;
+                  const isCurrentlyAnimating = isAnimating === item.name;
+
+                  return (
+                    <li key={item.name} className="animate-in slide-in-from-left-2 duration-200" style={{ animationDelay: `${itemIdx * 50}ms` }}>
+                      <div className="relative">
+                        <button
+                          onClick={() => {
+                            if (item.children && !isSidebarCollapsed) {
+                              toggleMenu(item.name);
+                            } else if (item.isClickable) {
+                              if (!item.isCustomDot && !isSidebarCollapsed) {
+                                toggleArrow(item.name);
+                              }
+                              handleItemClick(item.name, item.isClickable);
                             }
-                            handleItemClick(item.name, item.isClickable);
-                          }
-                          // Non-clickable items (Favorites Overview/Projects) do nothing on click
-                        }}
-                        className={clsx(
-                          "w-full flex items-center gap-2 px-2 py-2 text-gray-700 dark:text-gray-300 rounded-md",
-                          "hover:bg-gray-100 dark:hover:bg-gray-800", // Always show hover for all items
-                          isActive && item.isClickable && "bg-gray-100 dark:bg-gray-800 font-medium text-black dark:text-white"
-                        )}
-                      >
-                        {/* Only show arrows for non-dot items or items with children */}
-                        {(!item.isCustomDot || item.children) && (
+                          }}
+                          className={clsx(
+                            "w-full flex items-center rounded-md transition-all duration-200 ease-in-out hover:bg-gray-100 dark:hover:bg-gray-800",
+                            isSidebarCollapsed ? "gap-0 px-2 py-2 justify-center" : "gap-2 px-2 py-1",
+                            "text-gray-700 dark:text-gray-300",
+                            isActive && item.isClickable && "bg-gray-100 dark:bg-gray-800 font-medium text-black dark:text-white"
+                          )}
+                          title={isSidebarCollapsed ? item.name : undefined} // Show tooltip when collapsed
+                        >
+                          {/* Arrows - only show when expanded */}
+                          {(!item.isCustomDot || item.children) && (
+                            <Image
+                              src={getIconPath(arrowDown ? "/ArrowLineDown.svg" : "/ArrowLineRight.svg")}
+                              alt={arrowDown ? "expanded" : "collapsed"}
+                              width={16}
+                              height={16}
+                              className={clsx(
+                                "text-gray-500 dark:text-gray-400 transition-all duration-150 ease-out",
+                                showContent && !isSidebarCollapsed ? "opacity-100 w-4" : "opacity-0 w-0"
+                              )}
+                            />
+                          )}
+                          
+                          {/* Icon or dot */}
+                          {item.isCustomDot ? (
+                            <span
+                              className={clsx(
+                                "w-2 h-2 rounded-full transition-all duration-300 ease-in-out",
+                                isActive ? 'bg-green-500' : 'bg-gray-400 dark:bg-gray-500'
+                              )}
+                            />
+                          ) : item.icon ? (
+                            <Image
+                              src={getIconPath(item.icon)}
+                              alt={item.name}
+                              width={18}
+                              height={18}
+                              className="transition-all duration-200 ease-out flex-shrink-0"
+                            />
+                          ) : null}
+                          
+                          {/* Text - smooth fade out */}
+                          <span className={clsx(
+                            "text-sm font-medium transition-all duration-150 ease-out whitespace-nowrap overflow-hidden",
+                            showContent && !isSidebarCollapsed ? "opacity-100 w-auto ml-2" : "opacity-0 w-0 ml-0"
+                          )}>
+                            {item.name}
+                          </span>
+                        </button>
+
+                        {/* Selection indicator */}
+                        {isActive && item.isClickable && (
                           <Image
-                            src={getIconPath(arrowDown ? "/ArrowLineDown.svg" : "/ArrowLineRight.svg")}
-                            alt={arrowDown ? "expanded" : "collapsed"}
-                            width={16}
-                            height={16}
-                            className="text-gray-500 dark:text-gray-400"
-                          />
-                        )}
-                        {item.isCustomDot ? (
-                          <span 
-                            className={clsx(
-                              "w-2 h-2 rounded-full",
-                              isActive ? 'bg-green-500' : 'bg-gray-400 dark:bg-gray-500'
-                            )}
-                          />
-                        ) : item.icon ? (
-                          <Image
-                            src={getIconPath(item.icon)}
-                            alt={item.name}
+                            src={getIconPath("/Selected.svg")}
+                            alt="selected"
                             width={18}
                             height={18}
+                            className="absolute -left-0 top-1/2 -translate-y-1/2 transition-all duration-300 ease-in-out"
                           />
-                        ) : null}
-                        <span className="text-sm font-medium">{item.name}</span>
-                      </button>
-                      {isActive && item.isClickable && (
-                        <Image
-                          src={getIconPath("/Selected.svg")}
-                          alt="selected"
-                          width={18}
-                          height={18}
-                          className="absolute -left-0 top-1/2 -translate-y-1/2"
-                        />
+                        )}
+                      </div>
+
+                      {/* Dropdown - only show when expanded */}
+                      {item.children && !isSidebarCollapsed && (
+                        <div
+                          className={clsx(
+                            "ml-13 overflow-hidden transition-all duration-500 ease-in-out",
+                            isOpen
+                              ? "max-h-96 opacity-100 mt-1"
+                              : "max-h-0 opacity-0 mt-0"
+                          )}
+                        >
+                          <ul className={clsx(
+                            "space-y-1 transform transition-all duration-300 ease-in-out",
+                            isOpen ? "translate-y-0 scale-100" : "-translate-y-2 scale-95"
+                          )}>
+                            {item.children.map((child, childIdx) => {
+                              const childActive = selected === child.name;
+                              return (
+                                <li key={child.name} className="relative">
+                                  <a
+                                    href={child.href}
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      handleItemClick(child.name);
+                                    }}
+                                    className={clsx(
+                                      "block px-2 py-1 text-sm text-gray-600 dark:text-gray-400 rounded-md",
+                                      "transition-all duration-200 ease-in-out",
+                                      "hover:bg-gray-100 dark:hover:bg-gray-800",
+                                      childActive && "bg-gray-100 dark:bg-gray-800 font-medium text-black dark:text-white"
+                                    )}
+                                    style={{
+                                      animationDelay: `${childIdx * 50}ms`,
+                                      opacity: isOpen ? 1 : 0,
+                                      transform: isOpen ? 'translateX(0)' : 'translateX(-10px)'
+                                    }}
+                                  >
+                                    <span className="transition-transform duration-200">
+                                      {child.name}
+                                    </span>
+                                  </a>
+
+                                  {childActive && (
+                                    <Image
+                                      src={getIconPath("/Selected.svg")}
+                                      alt="selected"
+                                      width={18}
+                                      height={18}
+                                      className="absolute -left-0 top-1/2 -translate-y-1/2 transition-all duration-200 ease-in-out"
+                                    />
+                                  )}
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        </div>
                       )}
-                    </div>
-                    
-                    {/* Only show dropdown for User Profile */}
-                    {item.children && isOpen && (
-                      <ul className="ml-8 mt-1 space-y-1">
-                        {item.children.map((child) => {
-                          const childActive = selected === child.name;
-                          return (
-                            <li key={child.name} className="relative">
-                              <a
-                                href={child.href}
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  handleItemClick(child.name);
-                                }}
-                                className={clsx(
-                                  "block px-2 py-1 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md",
-                                  childActive && "bg-gray-100 dark:bg-gray-800 font-medium text-black dark:text-white"
-                                )}
-                              >
-                                {child.name}
-                              </a>
-                              {childActive && (
-                                <Image
-                                  src={getIconPath("/Selected.svg")}
-                                  alt="selected"
-                                  width={18}
-                                  height={18}
-                                  className="absolute -left-0 top-1/2 -translate-y-1/2"
-                                />
-                              )}
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        ))}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          );
+        })}
       </nav>
     </aside>
   );
