@@ -1,427 +1,7 @@
-// "use client";
-// import Image from "next/image";
-// import { memo, useMemo, Suspense } from "react";
-
-// // Constants
-// const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-// const PROJECTION_MONTHS = MONTHS.slice(0, 7); // First 7 months for revenue chart
-
-// // Components
-// const LoadingSpinner = () => (
-//   <div className="flex items-center justify-center p-4">
-//     <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-//   </div>
-// );
-
-// // const ErrorFallback = ({ error }: { error: Error }) => (
-// //   <div className="p-4 bg-red-50 dark:bg-red-900/10 rounded-xl">
-// //     <p className="text-red-600 dark:text-red-400">Error: {error.message}</p>
-// //   </div>
-// // );
-
-// // Chart Components Wrapper
-// const ChartWrapper = ({ children }: { children: React.ReactNode }) => (
-//   <Suspense fallback={<LoadingSpinner />}>
-//     {children}
-//   </Suspense>
-// );
-
-// // Interfaces
-// interface StatData {
-//   title: string;
-//   value: string;
-//   change: string;
-//   isPositive: boolean;
-// }
-
-// interface LocationData {
-//   city: string;
-//   value: string;
-//   percentage: number;
-// }
-
-// interface ProductData {
-//   name: string;
-//   price: string;
-//   quantity: number;
-//   amount: string;
-// }
-
-// interface SalesData {
-//   label: string;
-//   amount: string;
-//   color: string;
-// }
-
-// // Memoized sub-components for better performance
-// const StatsCard = memo(({ stat }: { stat: StatData }) => (
-//   <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-200">
-//     <div className="flex items-center justify-between mb-4">
-//       <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">
-//         {stat.title}
-//       </h3>
-//       <div className="flex items-center gap-1">
-//         <Image
-//           src={stat.isPositive ? "/mains/ArrowRise.svg" : "/mains/ArrowFall.svg"}
-//           alt={stat.isPositive ? "Rise" : "Fall"}
-//           width={16}
-//           height={16}
-//           className={stat.isPositive ? "text-green-500" : "text-red-500"}
-//         />
-//         <span className={`text-sm font-medium ${
-//           stat.isPositive ? "text-green-600" : "text-red-600"
-//         }`}>
-//           {stat.change}
-//         </span>
-//       </div>
-//     </div>
-//     <div className="text-3xl font-bold text-gray-900 dark:text-white">
-//       {stat.value}
-//     </div>
-//   </div>
-// ));
-
-// interface RevenueData {
-//   currentWeek: number;
-//   previousWeek: number;
-//   monthlyData: number[];
-// }
-
-// const RevenueChart = memo(() => {
-//   const revenueData = useMemo<RevenueData>(() => ({
-//     currentWeek: 58211,
-//     previousWeek: 68768,
-//     monthlyData: [30, 60, 40, 80, 50, 70, 65]
-//   }), []);
-
-//   return (
-//     <ChartWrapper>
-//       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-//         <div className="flex items-center justify-between mb-6">
-//           <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-//             Revenue
-//           </h3>
-//           <div className="flex items-center gap-6 text-sm">
-//             <div className="flex items-center gap-2">
-//               <div className="w-3 h-3 bg-gray-300 rounded-full"></div>
-//               <span className="text-gray-600 dark:text-gray-400">
-//                 Current Week ${revenueData.currentWeek.toLocaleString()}
-//               </span>
-//             </div>
-//             <div className="flex items-center gap-2">
-//               <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-//               <span className="text-gray-600 dark:text-gray-400">
-//                 Previous Week ${revenueData.previousWeek.toLocaleString()}
-//               </span>
-//             </div>
-//           </div>
-//         </div>
-//         <div className="h-64 flex items-end justify-between gap-2">
-//           {revenueData.monthlyData.map((height, index) => (
-//             <div key={PROJECTION_MONTHS[index]} className="flex-1 flex flex-col items-center">
-//               <div 
-//                 className="w-full bg-gradient-to-t from-blue-500 to-blue-400 rounded-t-lg will-change-transform transition-all duration-300 ease-in-out"
-//                 style={{ height: `${height}%` }}
-//               ></div>
-//             </div>
-//           ))}
-//         </div>
-//         <div className="flex justify-between mt-4 text-xs text-gray-500">
-//           {PROJECTION_MONTHS.map(month => (
-//             <span key={month}>{month}</span>
-//           ))}
-//         </div>
-//       </div>
-//     </ChartWrapper>
-//   );
-// });
-
-// interface ProjectionData {
-//   projected: number;
-//   actual: number;
-// }
-
-// const ProjectionsChart = memo(() => {
-//   const chartData = useMemo<ProjectionData[]>(() => [
-//     { projected: 65, actual: 45 },
-//     { projected: 45, actual: 55 },
-//     { projected: 75, actual: 65 },
-//     { projected: 55, actual: 70 },
-//     { projected: 80, actual: 60 },
-//     { projected: 60, actual: 75 },
-//     { projected: 70, actual: 50 },
-//     { projected: 50, actual: 65 },
-//     { projected: 85, actual: 80 },
-//     { projected: 40, actual: 45 },
-//     { projected: 65, actual: 70 },
-//     { projected: 75, actual: 55 }
-//   ], []);
-
-//   return (
-//     <ChartWrapper>
-//       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-//         <div className="flex items-center justify-between mb-6">
-//           <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-//             Projections vs Actuals
-//           </h3>
-//           <div className="flex items-center gap-4 text-sm">
-//             <div className="flex items-center gap-2">
-//               <div className="w-3 h-3 bg-blue-200 dark:bg-blue-800 rounded"></div>
-//               <span className="text-gray-600 dark:text-gray-400">Projected</span>
-//             </div>
-//             <div className="flex items-center gap-2">
-//               <div className="w-3 h-3 bg-blue-500 rounded"></div>
-//               <span className="text-gray-600 dark:text-gray-400">Actual</span>
-//             </div>
-//           </div>
-//         </div>
-//         <div className="h-64 flex items-end justify-between gap-1">
-//           {chartData.map((data, i) => (
-//             <div key={MONTHS[i]} className="flex flex-col items-center gap-1 flex-1">
-//               <div 
-//                 className="w-full bg-blue-200 dark:bg-blue-800 rounded will-change-transform transition-all duration-300 ease-in-out"
-//                 style={{ height: `${data.projected}%` }}
-//               ></div>
-//               <div 
-//                 className="w-full bg-blue-500 rounded will-change-transform transition-all duration-300 ease-in-out"
-//                 style={{ height: `${data.actual}%` }}
-//               ></div>
-//             </div>
-//           ))}
-//         </div>
-//         <div className="flex justify-between mt-4 text-xs text-gray-500">
-//           {MONTHS.map(month => (
-//             <span key={month}>{month}</span>
-//           ))}
-//         </div>
-//       </div>
-//     </ChartWrapper>
-//   );
-// });
-
-// const LocationChart = memo(({ revenueByLocation }: { revenueByLocation: LocationData[] }) => (
-//   <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-//     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
-//       Revenue by Location
-//     </h3>
-//     <div className="space-y-4">
-//       {revenueByLocation.map((location) => (
-//         <div key={location.city} className="flex items-center gap-4">
-//           <Image
-//             src="/mains/Map.svg"
-//             alt="Location"
-//             width={16}
-//             height={16}
-//             className="text-gray-500"
-//           />
-//           <span className="text-sm font-medium text-gray-900 dark:text-white min-w-[100px]">
-//             {location.city}
-//           </span>
-//           <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-//             <div 
-//               className="h-full bg-gradient-to-r from-blue-500 to-blue-400 rounded-full will-change-transform"
-//               style={{ width: `${location.percentage}%` }}
-//             ></div>
-//           </div>
-//           <span className="text-sm font-semibold text-gray-900 dark:text-white min-w-[40px]">
-//             {location.value}
-//           </span>
-//         </div>
-//       ))}
-//     </div>
-//   </div>
-// ));
-
-// const ProductsTable = memo(({ topSellingProducts }: { topSellingProducts: ProductData[] }) => (
-//   <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-//     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
-//       Top Selling Products
-//     </h3>
-//     <div className="space-y-4">
-//       <div className="grid grid-cols-4 gap-4 text-xs font-medium text-gray-500 dark:text-gray-400 pb-2 border-b border-gray-200 dark:border-gray-700">
-//         <span>Name</span>
-//         <span>Price</span>
-//         <span>Quantity</span>
-//         <span>Amount</span>
-//       </div>
-//       {topSellingProducts.map((product) => (
-//         <div key={product.name} className="grid grid-cols-4 gap-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200">
-//           <span className="text-sm font-medium text-gray-900 dark:text-white">
-//             {product.name}
-//           </span>
-//           <span className="text-sm text-gray-600 dark:text-gray-400">
-//             {product.price}
-//           </span>
-//           <span className="text-sm text-gray-600 dark:text-gray-400">
-//             {product.quantity}
-//           </span>
-//           <span className="text-sm font-semibold text-gray-900 dark:text-white">
-//             {product.amount}
-//           </span>
-//         </div>
-//       ))}
-//     </div>
-//   </div>
-// ));
-
-// const TotalSalesChart = memo(({ totalSalesData }: { totalSalesData: SalesData[] }) => (
-//   <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-//     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
-//       Total Sales
-//     </h3>
-//     <div className="flex items-center justify-center">
-//       <div className="relative w-48 h-48">
-//         <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-//           <circle 
-//             cx="50" 
-//             cy="50" 
-//             r="40" 
-//             fill="none" 
-//             stroke="currentColor" 
-//             strokeWidth="8"
-//             className="text-gray-200 dark:text-gray-700"
-//           />
-//           <circle 
-//             cx="50" 
-//             cy="50" 
-//             r="40" 
-//             fill="none" 
-//             stroke="#3b82f6" 
-//             strokeWidth="8" 
-//             strokeDasharray="188.5" 
-//             strokeDashoffset="47"
-//             className="will-change-transform"
-//           />
-//         </svg>
-//         <div className="absolute inset-0 flex items-center justify-center">
-//           <div className="text-center">
-//             <div className="text-2xl font-bold text-gray-900 dark:text-white">38.6%</div>
-//             <div className="text-sm text-gray-500 dark:text-gray-400">Total Sales</div>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-//       {totalSalesData.map((item) => (
-//         <div key={item.label} className="text-center">
-//           <div className="flex items-center justify-center gap-2 mb-2">
-//             <div className={`w-3 h-3 rounded-full ${item.color}`}></div>
-//             <span className="text-sm text-gray-600 dark:text-gray-400">
-//               {item.label}
-//             </span>
-//           </div>
-//           <div className="text-lg font-semibold text-gray-900 dark:text-white">
-//             {item.amount}
-//           </div>
-//         </div>
-//       ))}
-//     </div>
-//   </div>
-// ));
-
-// // Main component
-// const MainDashboard = memo(() => {
-//   // Static data memoized to prevent unnecessary re-renders
-//   const statsData = useMemo<StatData[]>(() => [
-//     {
-//       title: "Customers",
-//       value: "3,781",
-//       change: "+11.01%",
-//       isPositive: true
-//     },
-//     {
-//       title: "Orders",
-//       value: "1,219",
-//       change: "-0.03%",
-//       isPositive: false
-//     },
-//     {
-//       title: "Revenue",
-//       value: "$695",
-//       change: "+15.03%",
-//       isPositive: true
-//     },
-//     {
-//       title: "Growth",
-//       value: "30.1%",
-//       change: "+6.08%",
-//       isPositive: true
-//     }
-//   ], []);
-
-//   const revenueByLocation = useMemo<LocationData[]>(() => [
-//     { city: "New York", value: "72K", percentage: 80 },
-//     { city: "San Francisco", value: "39K", percentage: 55 },
-//     { city: "Sydney", value: "25K", percentage: 35 },
-//     { city: "Singapore", value: "61K", percentage: 70 }
-//   ], []);
-
-//   const topSellingProducts = useMemo<ProductData[]>(() => [
-//     { name: "ASOS Ridley High Waist", price: "$79.49", quantity: 82, amount: "$6,518.18" },
-//     { name: "Marco Lightweight Shirt", price: "$128.50", quantity: 37, amount: "$4,754.50" },
-//     { name: "Half Sleeve Shirt", price: "$39.99", quantity: 64, amount: "$2,559.36" },
-//     { name: "Lightweight Jacket", price: "$20.00", quantity: 184, amount: "$3,680.00" },
-//     { name: "Marco Shoes", price: "$79.49", quantity: 64, amount: "$1,965.81" }
-//   ], []);
-
-//   const totalSalesData = useMemo<SalesData[]>(() => [
-//     { label: "Direct", amount: "$300.56", color: "bg-blue-500" },
-//     { label: "Affiliate", amount: "$135.18", color: "bg-green-500" },
-//     { label: "Sponsored", amount: "$154.02", color: "bg-orange-500" },
-//     { label: "E-mail", amount: "$48.96", color: "bg-purple-500" }
-//   ], []);
-
-//   return (
-//     <div>
-//       <div className="p-6 space-y-6">
-//         {/* Stats Cards */}
-//         <Suspense fallback={<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-//           {[...Array(4)].map((_, i) => (
-//             <div key={i} className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 animate-pulse">
-//               <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-4"></div>
-//               <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
-//             </div>
-//           ))}
-//         </div>}>
-//           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-//             {statsData.map((stat) => (
-//               <StatsCard key={stat.title} stat={stat} />
-//             ))}
-//           </div>
-//         </Suspense>
-
-//         {/* Charts Row */}
-//         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-//           <RevenueChart />
-//           <ProjectionsChart />
-//         </div>
-
-//         {/* Second Row */}
-//         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-//           <LocationChart revenueByLocation={revenueByLocation} />
-//           <ProductsTable topSellingProducts={topSellingProducts} />
-//         </div>
-
-//         <TotalSalesChart totalSalesData={totalSalesData} />
-//       </div>
-//     </div>
-//   );
-// });
-
-// MainDashboard.displayName = 'MainDashboard';
-// StatsCard.displayName = 'StatsCard';
-// RevenueChart.displayName = 'RevenueChart';
-// ProjectionsChart.displayName = 'ProjectionsChart';
-// LocationChart.displayName = 'LocationChart';
-// ProductsTable.displayName = 'ProductsTable';
-// TotalSalesChart.displayName = 'TotalSalesChart';
-
-// export default MainDashboard;
-
-
 "use client";
 import Image from "next/image";
-import { useState, memo } from "react";
+import { memo } from "react";
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, CartesianGrid, AreaChart, Area, PieChart, Pie, Cell } from 'recharts';
 
 // Types
 interface StatData {
@@ -429,6 +9,7 @@ interface StatData {
   value: string;
   change: string;
   isPositive: boolean;
+  hasBackground?: boolean;
 }
 
 interface LocationData {
@@ -448,192 +29,236 @@ interface SalesData {
   label: string;
   amount: string;
   color: string;
+  percentage: number;
 }
 
-// Memoized sub-components for better performance
+// Enhanced StatsCard with independent hover animations for title and value/change rows
 const StatsCard = memo(({ stat }: { stat: StatData }) => (
-  <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-200">
-    <div className="flex items-center justify-between mb-4">
-      <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">
-        {stat.title}
-      </h3>
-      <div className="flex items-center gap-1">
+  <div className={`relative rounded-3xl p-6 w-full transition-all duration-500 ease-in-out ${
+    stat.hasBackground 
+      ? 'bg-blue-50 dark:bg-blue-900/20'
+      : 'bg-black/2 dark:bg-gray-800'
+  }`}>
+    {/* Title with independent hoverable background */}
+    <div className="relative mb-4 group/title">
+      <div className="absolute inset-0 rounded-lg transition-all duration-500 ease-in-out opacity-0 group-hover/title:opacity-100 bg-gray-200 dark:bg-gray-600"></div>
+      <div className="relative px-3 py-1.5 rounded-lg">
+        <h3 className="text-md font-medium text-gray-600 dark:text-gray-400">
+          {stat.title}
+        </h3>
+      </div>
+    </div>
+    {/* Value and Change Container with independent hoverable background and swap animation */}
+    <div className="relative group/value flex items-center justify-between p-3 rounded-lg transition-all duration-500 ease-in-out">
+      <div className="absolute inset-0 rounded-lg transition-all duration-500 ease-in-out opacity-0 group-hover/value:opacity-100 bg-gray-200 dark:bg-gray-600"></div>
+      <div className="relative text-2xl font-bold text-gray-900 dark:text-white transition-all duration-500 ease-in-out order-1 group-hover/value:order-2">
+        {stat.value}
+      </div>
+      <div className="relative flex items-center gap-1 transition-all duration-500 ease-in-out order-2 group-hover/value:order-1">
         <Image
           src={stat.isPositive ? "/mains/ArrowRise.svg" : "/mains/ArrowFall.svg"}
           alt={stat.isPositive ? "Rise" : "Fall"}
-          width={16}
-          height={16}
-          className={stat.isPositive ? "text-green-500" : "text-red-500"}
+          width={20}
+          height={20}
+          className="transition-transform duration-500 ease-in-out group-hover/value:scale-110"
         />
-        <span className={`text-sm font-medium ${
-          stat.isPositive ? "text-green-600" : "text-red-600"
-        }`}>
+        <span className="text-md font-medium transition-colors duration-500 ease-in-out">
           {stat.change}
         </span>
       </div>
     </div>
-    <div className="text-3xl font-bold text-gray-900 dark:text-white">
-      {stat.value}
-    </div>
   </div>
 ));
 
-const RevenueChart = memo(() => (
-  <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-    <div className="flex items-center justify-between mb-6">
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-        Revenue
-      </h3>
-      <div className="flex items-center gap-6 text-sm">
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-gray-300 rounded-full"></div>
-          <span className="text-gray-600 dark:text-gray-400">
-            Current Week $58,211
-          </span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-          <span className="text-gray-600 dark:text-gray-400">
-            Previous Week $68,768
-          </span>
-        </div>
-      </div>
-    </div>
-    <div className="h-64 flex items-end justify-between gap-2">
-      {[30, 60, 40, 80, 50, 70, 65].map((height, index) => (
-        <div key={index} className="flex-1 flex flex-col items-center">
-          <div 
-            className="w-full bg-gradient-to-t from-blue-500 to-blue-400 rounded-t-lg will-change-transform"
-            style={{ height: `${height}%` }}
-          ></div>
-        </div>
-      ))}
-    </div>
-    <div className="flex justify-between mt-4 text-xs text-gray-500">
-      <span>Jan</span>
-      <span>Feb</span>
-      <span>Mar</span>
-      <span>Apr</span>
-      <span>May</span>
-      <span>Jun</span>
-      <span>Jul</span>
-    </div>
-  </div>
-));
-
+// Projections vs Actuals Chart using Recharts
 const ProjectionsChart = memo(() => {
-  // Static data to prevent hydration mismatches
-  const chartData = [
-    { projected: 65, actual: 45 },
-    { projected: 45, actual: 55 },
-    { projected: 75, actual: 65 },
-    { projected: 55, actual: 70 },
-    { projected: 80, actual: 60 },
-    { projected: 60, actual: 75 },
-    { projected: 70, actual: 50 },
-    { projected: 50, actual: 65 },
-    { projected: 85, actual: 80 },
-    { projected: 40, actual: 45 },
-    { projected: 65, actual: 70 },
-    { projected: 75, actual: 55 }
+  const data = [
+    { month: 'Jan', projected: 18, actual: 15 },
+    { month: 'Feb', projected: 22, actual: 19 },
+    { month: 'Mar', projected: 19, actual: 16 },
+    { month: 'Apr', projected: 27, actual: 24 },
+    { month: 'May', projected: 20, actual: 17 },
+    { month: 'Jun', projected: 25, actual: 22 }
   ];
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-      <div className="flex items-center justify-between mb-6">
+    <div className="bg-black/2 dark:bg-gray-800 rounded-3xl p-6 flex flex-col space-y-4 h-full min-h-[220px]">
+      <div className="flex-1 items-start justify-start">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
           Projections vs Actuals
         </h3>
       </div>
-      <div className="h-64 flex items-end justify-between gap-1">
-        {chartData.map((data, i) => (
-          <div key={i} className="flex flex-col items-center gap-1 flex-1">
-            <div 
-              className="w-full bg-blue-200 dark:bg-blue-800 rounded will-change-transform"
-              style={{ height: `${data.projected}%` }}
-            ></div>
-            <div 
-              className="w-full bg-blue-500 rounded will-change-transform"
-              style={{ height: `${data.actual}%` }}
-            ></div>
-          </div>
-        ))}
-      </div>
-      <div className="flex justify-between mt-4 text-xs text-gray-500">
-        <span>Jan</span>
-        <span>Feb</span>
-        <span>Mar</span>
-        <span>Apr</span>
-        <span>May</span>
-        <span>Jun</span>
-        <span>Jul</span>
-        <span>Aug</span>
-        <span>Sep</span>
-        <span>Oct</span>
-        <span>Nov</span>
-        <span>Dec</span>
+      <div className="px-0 -ml-6">
+        <ResponsiveContainer width="100%" height={220}>
+          <BarChart data={data} barCategoryGap="20%">
+            <CartesianGrid vertical={false} stroke="#EEF2F7" strokeDasharray="3 3" />
+
+            <XAxis
+              dataKey="month"
+              axisLine={false}
+              tickLine={false}
+              tick={{ fontSize: 12, fill: '#9CA3AF' }}
+              interval={0}
+              padding={{ left: 12, right: 12 }}
+            />
+
+            <YAxis
+              axisLine={false}
+              tickLine={false}
+              tick={{ fontSize: 12, fill: '#9CA3AF' }}
+              domain={[0, 30]}
+              ticks={[0, 10, 20, 30]}
+              tickFormatter={(value) => `${value}M`}
+            />
+
+            <Bar dataKey="projected" fill="#DBEAFE" radius={[6, 6, 0, 0]} barSize={30} />
+            <Bar dataKey="actual" fill="#3B82F6" radius={[6, 6, 0, 0]} barSize={20} />
+          </BarChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );
 });
 
+// Revenue Chart using Recharts
+const RevenueChart = memo(() => {
+  const data = [
+    { month: 'Jan', current: 12, previous: 15 },
+    { month: 'Feb', current: 8, previous: 18 },
+    { month: 'Mar', current: 16, previous: 12 },
+    { month: 'Apr', current: 14, previous: 20 },
+    { month: 'May', current: 22, previous: 16 },
+    { month: 'Jun', current: 20, previous: 22 }
+  ];
+
+  return (
+    <div className="bg-white dark:bg-gray-800 rounded-3xl p-6">
+      <div className="flex items-center justify-between mb-6">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+          Revenue
+        </h3>
+        <div className="flex items-center gap-6 text-sm">
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 bg-black rounded-full"></div>
+            <span className="text-gray-600 dark:text-gray-400">
+              Current Week $58,211
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 bg-blue-300 rounded-full"></div>
+            <span className="text-gray-600 dark:text-gray-400">
+              Previous Week $68,768
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      <ResponsiveContainer width="100%" height={200}>
+        <AreaChart data={data}>
+          <XAxis 
+            dataKey="month" 
+            axisLine={false}
+            tickLine={false}
+            tick={{ fontSize: 12, fill: '#9CA3AF' }}
+          />
+          <YAxis hide />
+          <Area 
+            type="monotone" 
+            dataKey="previous" 
+            stroke="#93C5FD" 
+            fill="#93C5FD" 
+            fillOpacity={0.3}
+            strokeWidth={2}
+            strokeDasharray="5 5"
+          />
+          <Area 
+            type="monotone" 
+            dataKey="current" 
+            stroke="#000000" 
+            fill="#3B82F6" 
+            fillOpacity={0.1}
+            strokeWidth={3}
+          />
+        </AreaChart>
+      </ResponsiveContainer>
+    </div>
+  );
+});
+
+// Revenue by Location with enhanced design
 const LocationChart = memo(({ revenueByLocation }: { revenueByLocation: LocationData[] }) => (
-  <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+  <div className="bg-white dark:bg-gray-800 rounded-3xl p-6">
     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
       Revenue by Location
     </h3>
+    
+    {/* World Map */}
+    <div className="mb-6 h-32 bg-gray-50 dark:bg-gray-700 rounded-lg flex items-center justify-center relative overflow-hidden">
+      <div className="relative w-full h-full flex items-center justify-center">
+        <Image
+          src="/mains/Map.svg"
+          alt="World Map"
+          width={240}
+          height={120}
+          className="opacity-20 dark:opacity-40"
+        />
+        {/* Location dots */}
+        <div className="absolute top-6 left-16 w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+        <div className="absolute top-8 left-32 w-2 h-2 bg-blue-500 rounded-full animate-pulse delay-100"></div>
+        <div className="absolute bottom-8 right-24 w-2 h-2 bg-blue-500 rounded-full animate-pulse delay-200"></div>
+        <div className="absolute top-4 right-20 w-2 h-2 bg-blue-500 rounded-full animate-pulse delay-300"></div>
+      </div>
+    </div>
+    
+    {/* Location List */}
     <div className="space-y-4">
-      {revenueByLocation.map((location, index) => (
-        <div key={location.city} className="flex items-center gap-4">
-          <Image
-            src="/mains/Map.svg"
-            alt="Location"
-            width={16}
-            height={16}
-            className="text-gray-500"
-          />
-          <span className="text-sm font-medium text-gray-900 dark:text-white min-w-[100px]">
+      {revenueByLocation.map((location) => (
+        <div key={location.city} className="flex items-center justify-between py-1">
+          <span className="text-sm font-medium text-gray-900 dark:text-white">
             {location.city}
           </span>
-          <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-            <div 
-              className="h-full bg-gradient-to-r from-blue-500 to-blue-400 rounded-full will-change-transform"
-              style={{ width: `${location.percentage}%` }}
-            ></div>
+          <div className="flex items-center gap-3">
+            <div className="w-16 h-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-gradient-to-r from-blue-500 to-blue-400 rounded-full transition-all duration-1000"
+                style={{ width: `${location.percentage}%` }}
+              ></div>
+            </div>
+            <span className="text-sm font-semibold text-gray-900 dark:text-white min-w-[40px]">
+              {location.value}
+            </span>
           </div>
-          <span className="text-sm font-semibold text-gray-900 dark:text-white min-w-[40px]">
-            {location.value}
-          </span>
         </div>
       ))}
     </div>
   </div>
 ));
 
+// Products Table
 const ProductsTable = memo(({ topSellingProducts }: { topSellingProducts: ProductData[] }) => (
-  <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+  <div className="bg-white dark:bg-gray-800 rounded-3xl p-6">
     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
       Top Selling Products
     </h3>
-    <div className="space-y-4">
-      <div className="grid grid-cols-4 gap-4 text-xs font-medium text-gray-500 dark:text-gray-400 pb-2 border-b border-gray-200 dark:border-gray-700">
+    <div className="space-y-1">
+      <div className="grid grid-cols-4 gap-4 text-xs font-medium text-gray-500 dark:text-gray-400 pb-3 border-b border-gray-200 dark:border-gray-700">
         <span>Name</span>
         <span>Price</span>
         <span>Quantity</span>
         <span>Amount</span>
       </div>
       {topSellingProducts.map((product) => (
-        <div key={product.name} className="grid grid-cols-4 gap-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200">
-          <span className="text-sm font-medium text-gray-900 dark:text-white">
+        <div key={product.name} className="grid grid-cols-4 gap-4 py-4 text-sm hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition-colors duration-200 px-2 -mx-2">
+          <span className="font-medium text-gray-900 dark:text-white">
             {product.name}
           </span>
-          <span className="text-sm text-gray-600 dark:text-gray-400">
+          <span className="text-gray-600 dark:text-gray-400">
             {product.price}
           </span>
-          <span className="text-sm text-gray-600 dark:text-gray-400">
+          <span className="text-gray-600 dark:text-gray-400">
             {product.quantity}
           </span>
-          <span className="text-sm font-semibold text-gray-900 dark:text-white">
+          <span className="font-semibold text-gray-900 dark:text-white">
             {product.amount}
           </span>
         </div>
@@ -642,88 +267,103 @@ const ProductsTable = memo(({ topSellingProducts }: { topSellingProducts: Produc
   </div>
 ));
 
-const TotalSalesChart = memo(({ totalSalesData }: { totalSalesData: SalesData[] }) => (
-  <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
-      Total Sales
-    </h3>
-    <div className="flex items-center justify-center">
-      <div className="relative w-48 h-48">
-        <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-          <circle 
-            cx="50" 
-            cy="50" 
-            r="40" 
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="8"
-            className="text-gray-200 dark:text-gray-700"
-          />
-          <circle 
-            cx="50" 
-            cy="50" 
-            r="40" 
-            fill="none" 
-            stroke="#3b82f6" 
-            strokeWidth="8" 
-            strokeDasharray="188.5" 
-            strokeDashoffset="47"
-            className="will-change-transform"
-          />
-        </svg>
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-gray-900 dark:text-white">38.6%</div>
-            <div className="text-sm text-gray-500 dark:text-gray-400">Total Sales</div>
+// Total Sales Chart using Recharts
+const TotalSalesChart = memo(({ totalSalesData }: { totalSalesData: SalesData[] }) => {
+  const COLORS = ['#000000', '#22C55E', '#3B82F6', '#F59E0B'];
+  
+  const pieData = totalSalesData.map((item, index) => ({
+    name: item.label,
+    value: item.percentage,
+    color: COLORS[index]
+  }));
+
+  return (
+    <div className="bg-white dark:bg-gray-800 rounded-3xl p-6">
+      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
+        Total Sales
+      </h3>
+      
+      <div className="flex items-center justify-center mb-6">
+        <div className="relative">
+          <ResponsiveContainer width={160} height={160}>
+            <PieChart>
+              <Pie
+                data={pieData}
+                cx="50%"
+                cy="50%"
+                innerRadius={50}
+                outerRadius={80}
+                paddingAngle={2}
+                dataKey="value"
+              >
+                {pieData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-center">
+              <div className="text-xl font-bold text-gray-900 dark:text-white">38.6%</div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-      {totalSalesData.map((item) => (
-        <div key={item.label} className="text-center">
-          <div className="flex items-center justify-center gap-2 mb-2">
-            <div className={`w-3 h-3 rounded-full ${item.color}`}></div>
-            <span className="text-sm text-gray-600 dark:text-gray-400">
-              {item.label}
+      
+      {/* Legend */}
+      <div className="space-y-3">
+        {totalSalesData.map((item, index) => (
+          <div key={item.label} className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div 
+                className="w-3 h-3 rounded-full" 
+                style={{ backgroundColor: COLORS[index] }}
+              ></div>
+              <span className="text-sm text-gray-600 dark:text-gray-400">
+                {item.label}
+              </span>
+            </div>
+            <span className="text-sm font-semibold text-gray-900 dark:text-white">
+              {item.amount}
             </span>
           </div>
-          <div className="text-lg font-semibold text-gray-900 dark:text-white">
-            {item.amount}
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
-  </div>
-));
+  );
+});
 
 // Main component
 const MainDashboard = memo(() => {
-  // Static data to prevent re-renders
+  // Static data matching Figma design
   const statsData: StatData[] = [
     {
       title: "Customers",
       value: "3,781",
       change: "+11.01%",
-      isPositive: true
+      isPositive: true,
+      hasBackground: true
     },
     {
       title: "Orders",
       value: "1,219",
       change: "-0.03%",
-      isPositive: false
+      isPositive: false,
+      hasBackground: false
     },
     {
       title: "Revenue",
       value: "$695",
       change: "+15.03%",
-      isPositive: true
+      isPositive: true,
+      hasBackground: false
     },
     {
       title: "Growth",
       value: "30.1%",
       change: "+6.08%",
-      isPositive: true
+      isPositive: true,
+      hasBackground: true
     }
   ];
 
@@ -743,35 +383,51 @@ const MainDashboard = memo(() => {
   ];
 
   const totalSalesData: SalesData[] = [
-    { label: "Direct", amount: "$300.56", color: "bg-blue-500" },
-    { label: "Affiliate", amount: "$135.18", color: "bg-green-500" },
-    { label: "Sponsored", amount: "$154.02", color: "bg-orange-500" },
-    { label: "E-mail", amount: "$48.96", color: "bg-purple-500" }
+    { label: "Direct", amount: "$300.56", color: "bg-black", percentage: 38.6 },
+    { label: "Affiliate", amount: "$135.18", color: "bg-green-500", percentage: 22.5 },
+    { label: "Sponsored", amount: "$154.02", color: "bg-blue-500", percentage: 25.7 },
+    { label: "E-mail", amount: "$48.96", color: "bg-amber-500", percentage: 13.2 }
   ];
 
   return (
     <div>
       <div className="p-6 space-y-6">
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {statsData.map((stat) => (
-            <StatsCard key={stat.title} stat={stat} />
-          ))}
+        {/* First Row: 4 Stats Cards in 2x2 + Projections Chart */}
+        <div className="grid grid-cols-12 gap-6">
+          {/* Stats Cards - 2x2 Grid */}
+          <div className="col-span-6">
+            <div className="grid grid-cols-2 gap-4">
+              {statsData.map((stat) => (
+                <StatsCard key={stat.title} stat={stat} />
+              ))}
+            </div>
+          </div>
+          
+          {/* Projections Chart */}
+          <div className="col-span-6">
+            <ProjectionsChart />
+          </div>
         </div>
 
-        {/* Charts Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <RevenueChart />
-          <ProjectionsChart />
+        {/* Second Row: Revenue Chart + Revenue by Location */}
+        <div className="grid grid-cols-12 gap-6">
+          <div className="col-span-8">
+            <RevenueChart />
+          </div>
+          <div className="col-span-4">
+            <LocationChart revenueByLocation={revenueByLocation} />
+          </div>
         </div>
 
-        {/* Second Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <LocationChart revenueByLocation={revenueByLocation} />
-          <ProductsTable topSellingProducts={topSellingProducts} />
+        {/* Third Row: Top Selling Products + Total Sales */}
+        <div className="grid grid-cols-12 gap-6">
+          <div className="col-span-8">
+            <ProductsTable topSellingProducts={topSellingProducts} />
+          </div>
+          <div className="col-span-4">
+            <TotalSalesChart totalSalesData={totalSalesData} />
+          </div>
         </div>
-
-        <TotalSalesChart totalSalesData={totalSalesData} />
       </div>
     </div>
   );
