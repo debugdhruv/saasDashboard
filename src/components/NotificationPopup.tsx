@@ -51,7 +51,6 @@ export default function NotificationPopup({ isOpen, onClose, onViewAll }: Notifi
     }
   ];
 
-  // Click outside to close handler
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (isOpen && popupRef.current && !popupRef.current.contains(event.target as Node)) {
@@ -66,7 +65,6 @@ export default function NotificationPopup({ isOpen, onClose, onViewAll }: Notifi
     };
 
     if (isOpen) {
-      // Add delay to prevent immediate closing when opening
       setTimeout(() => {
         document.addEventListener('mousedown', handleClickOutside);
         document.addEventListener('keydown', handleEscapeKey);
@@ -79,7 +77,6 @@ export default function NotificationPopup({ isOpen, onClose, onViewAll }: Notifi
     };
   }, [isOpen, onClose]);
 
-  // Prevent body scroll when popup is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -92,7 +89,6 @@ export default function NotificationPopup({ isOpen, onClose, onViewAll }: Notifi
     };
   }, [isOpen]);
 
-  // Don't return null immediately - let animation complete first
   const [shouldRender, setShouldRender] = useState(isOpen);
 
   useEffect(() => {
@@ -109,7 +105,6 @@ export default function NotificationPopup({ isOpen, onClose, onViewAll }: Notifi
 
   return (
     <>
-      {/* Backdrop */}
       <div 
         className={clsx(
           "fixed inset-0 z-40 transition-all duration-300 ease-out",
@@ -118,7 +113,6 @@ export default function NotificationPopup({ isOpen, onClose, onViewAll }: Notifi
         onClick={onClose}
       />
 
-      {/* Popup */}
       <div 
         ref={popupRef}
         className={clsx(
@@ -129,7 +123,6 @@ export default function NotificationPopup({ isOpen, onClose, onViewAll }: Notifi
             : "opacity-0 scale-95 translate-x-full"
         )}
       >
-        {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
             Notifications
@@ -144,7 +137,6 @@ export default function NotificationPopup({ isOpen, onClose, onViewAll }: Notifi
           </button>
         </div>
 
-        {/* Notifications List */}
         <div className="max-h-96 overflow-y-auto">
           <div className="p-4 space-y-3">
             {notifications.map((notification, index) => (
@@ -158,7 +150,6 @@ export default function NotificationPopup({ isOpen, onClose, onViewAll }: Notifi
                   animation: isOpen ? 'slideInUp 0.3s ease-out forwards' : 'none'
                 }}
                 onClick={() => {
-                  // Handle notification click here
                   console.log('Notification clicked:', notification.id);
                 }}
               >
@@ -182,7 +173,6 @@ export default function NotificationPopup({ isOpen, onClose, onViewAll }: Notifi
                     {notification.time}
                   </p>
                 </div>
-                {/* Unread indicator */}
                 {['Just now', '59 minutes ago'].includes(notification.time) && (
                   <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
                 )}
@@ -191,7 +181,6 @@ export default function NotificationPopup({ isOpen, onClose, onViewAll }: Notifi
           </div>
         </div>
 
-        {/* Footer */}
         <div className="p-4 border-t border-gray-200 dark:border-gray-700">
           <button 
             onClick={() => {
@@ -205,7 +194,6 @@ export default function NotificationPopup({ isOpen, onClose, onViewAll }: Notifi
         </div>
       </div>
 
-      {/* CSS Animations */}
       <style jsx>{`
         @keyframes slideInFromRight {
           from {

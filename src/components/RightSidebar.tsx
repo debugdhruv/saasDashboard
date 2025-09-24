@@ -103,7 +103,6 @@ export default function RightSidebar({ isRightSidebarOpen }: RightSidebarProps) 
                 "transition-all duration-300 ease-out",
                 isRightSidebarOpen ? "opacity-100 pt-5 pl-5" : "opacity-0 p-0"
             )}>
-                {/* Notifications Section */}
                 <div className="mb-8 mr-4">
                     <h3 className="text-md font-semibold text-gray-900 dark:text-white mb-4">
                         Notifications
@@ -129,7 +128,6 @@ export default function RightSidebar({ isRightSidebarOpen }: RightSidebarProps) 
                     </div>
                 </div>
 
-                {/* Activities Section */}
                 <div className="mb-8 mr-4">
                     <h4 className="text-md font-semibold text-gray-900 dark:text-white mb-4">
                         Activities
@@ -162,7 +160,6 @@ export default function RightSidebar({ isRightSidebarOpen }: RightSidebarProps) 
                     </div>
                 </div>
 
-                {/* Contacts Section */}
                 <div className="mb-8 mr-4">
                     <h4 className="text-md font-semibold text-gray-900 dark:text-white mb-4">
                         Contacts

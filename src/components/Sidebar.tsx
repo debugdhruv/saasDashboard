@@ -72,13 +72,10 @@ export default function Sidebar({ isSidebarCollapsed }: SidebarProps) {
   const [isAnimating, setIsAnimating] = useState<string | null>(null);
   const [showContent, setShowContent] = useState(!isSidebarCollapsed);
 
-  // Handle content visibility with delay
   useEffect(() => {
     if (isSidebarCollapsed) {
-      // Hide content immediately when collapsing
       setShowContent(false);
     } else {
-      // Show content after a small delay when expanding
       const timer = setTimeout(() => setShowContent(true), 150);
       return () => clearTimeout(timer);
     }
@@ -131,7 +128,6 @@ export default function Sidebar({ isSidebarCollapsed }: SidebarProps) {
       "fixed left-0 top-0 h-screen bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300 ease-out",
       isSidebarCollapsed ? "w-16" : "w-64"
     )}>
-      {/* Top Profile */}
       <Link href={"/"}>
       <div className={clsx(
         "flex cursor-pointer items-center pt-4 mb-6 transition-all duration-300 ease-out",
@@ -155,7 +151,6 @@ export default function Sidebar({ isSidebarCollapsed }: SidebarProps) {
       </div>
       </Link>
 
-      {/* Tabs: Favorites and Recently - only show when expanded */}
       <div className={clsx(
         "flex pl-4 mb-2 transition-all duration-150 ease-out overflow-hidden",
         showContent && !isSidebarCollapsed ? "opacity-100 h-auto" : "opacity-0 h-0"
@@ -184,17 +179,14 @@ export default function Sidebar({ isSidebarCollapsed }: SidebarProps) {
         </button>
       </div>
 
-      {/* Navigation */}
       <nav className={clsx("space-y-6", isSidebarCollapsed ? "px-2" : "px-4")}>
         {navSections.map((section, idx) => {
-          // Skip the first section (Overview/Projects) when sidebar is collapsed
           if (isSidebarCollapsed && idx === 0) {
             return null;
           }
 
           return (
             <div key={idx} className="animate-in slide-in-from-left-4 duration-300" style={{ animationDelay: `${idx * 100}ms` }}>
-              {/* Section title - only show when expanded */}
               {section.title && (
                 <h2 className={clsx(
                   "text-[14px] font-medium text-gray-400 dark:text-gray-500 mb-2 transition-all duration-150 ease-out whitespace-nowrap overflow-hidden",
@@ -231,7 +223,6 @@ export default function Sidebar({ isSidebarCollapsed }: SidebarProps) {
                           )}
                           title={isSidebarCollapsed ? item.name : undefined} // Show tooltip when collapsed
                         >
-                          {/* Arrows - only show when expanded */}
                           {(!item.isCustomDot || item.children) && (
                             <Image
                               src={getIconPath(arrowDown ? "/ArrowLineDown.svg" : "/ArrowLineRight.svg")}
@@ -245,7 +236,6 @@ export default function Sidebar({ isSidebarCollapsed }: SidebarProps) {
                             />
                           )}
 
-                          {/* Icon or dot */}
                           {item.isCustomDot ? (
                             <span
                               className={clsx(
@@ -263,7 +253,6 @@ export default function Sidebar({ isSidebarCollapsed }: SidebarProps) {
                             />
                           ) : null}
 
-                          {/* Text - smooth fade out */}
                           <span className={clsx(
                             "text-sm font-medium transition-all duration-150 ease-out whitespace-nowrap overflow-hidden",
                             showContent && !isSidebarCollapsed ? "opacity-100 w-auto ml-2" : "opacity-0 w-0 ml-0"
@@ -272,7 +261,6 @@ export default function Sidebar({ isSidebarCollapsed }: SidebarProps) {
                           </span>
                         </button>
 
-                        {/* Selection indicator */}
                         {isActive && item.isClickable && (
                           <Image
                             src={getIconPath("/Selected.svg")}
@@ -284,7 +272,6 @@ export default function Sidebar({ isSidebarCollapsed }: SidebarProps) {
                         )}
                       </div>
 
-                      {/* Dropdown - only show when expanded */}
                       {item.children && !isSidebarCollapsed && (
                         <div
                           className={clsx(

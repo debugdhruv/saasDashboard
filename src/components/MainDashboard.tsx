@@ -2,9 +2,8 @@
 
 import Image from "next/image";
 import { memo } from "react";
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, CartesianGrid, AreaChart, Area, PieChart, Pie, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, CartesianGrid, AreaChart, Area } from 'recharts';
 
-// Types
 interface StatData {
   title: string;
   value: string;
@@ -33,13 +32,11 @@ interface SalesData {
   percentage: number;
 }
 
-// Enhanced StatsCard with independent hover animations for title and value/change rows
 const StatsCard = memo(({ stat }: { stat: StatData }) => (
   <div className={`relative rounded-3xl p-6 w-full transition-all duration-500 ease-in-out ${stat.hasBackground
     ? 'bg-blue-50 dark:bg-blue-900/20'
     : 'bg-black/2 dark:bg-gray-800'
     }`}>
-    {/* Title with independent hoverable background */}
     <div className="relative mb-4 group/title">
       <div className="absolute inset-0 rounded-lg transition-all duration-500 ease-in-out opacity-0 group-hover/title:opacity-100 bg-black/20 dark:bg-gray-600"></div>
       <div className="relative px-3 py-1.5 rounded-lg">
@@ -48,7 +45,6 @@ const StatsCard = memo(({ stat }: { stat: StatData }) => (
         </h3>
       </div>
     </div>
-    {/* Value and Change Container with independent hoverable background and swap animation */}
     <div className="relative group/value flex items-center justify-between p-3 rounded-lg transition-all duration-500 ease-in-out">
       <div className="absolute inset-0 rounded-lg transition-all duration-500 ease-in-out opacity-0 group-hover/value:opacity-100 bg-black/20 dark:bg-gray-600"></div>
       <div className="relative text-2xl font-bold text-gray-900 dark:text-white transition-all duration-500 ease-in-out order-1 group-hover/value:order-2">
@@ -70,7 +66,6 @@ const StatsCard = memo(({ stat }: { stat: StatData }) => (
   </div>
 ));
 
-// Projections vs Actuals Chart using Recharts
 const ProjectionsChart = memo(() => {
   const data = [
     { month: 'Jan', projected: 19, actual: 14 },
@@ -111,7 +106,6 @@ const ProjectionsChart = memo(() => {
               tickFormatter={(value) => `${value}M`}
             />
 
-            {/* projected draws first (background) — wider & slightly transparent */}
             <Bar
               dataKey="projected"
               fill="#A8C5DA"
@@ -120,7 +114,6 @@ const ProjectionsChart = memo(() => {
               barSize={36}
             />
 
-            {/* actual draws after projected so it appears on top — narrower & solid */}
             <Bar
               dataKey="actual"
               fill="#A8C5DA"
@@ -135,7 +128,6 @@ const ProjectionsChart = memo(() => {
   );
 });
 
-// Revenue Chart using Recharts
 const RevenueChart = memo(() => {
   const data = [
     { month: 'Jan', current: 16, previous: 12 },
@@ -212,14 +204,12 @@ const RevenueChart = memo(() => {
   );
 });
 
-// Revenue by Location with enhanced design
 const LocationChart = memo(({ revenueByLocation }: { revenueByLocation: LocationData[] }) => (
   <div className="bg-black/2 dark:bg-gray-800 rounded-3xl p-6 h-full flex flex-col justify-between">
     <h3 className="text-md font-semibold text-center text-gray-900 dark:text-white">
       Revenue by Location
     </h3>
 
-    {/* World Map */}
     <div className="mb-4 h-28 dark:bg-gray-700 rounded-lg flex items-center justify-center relative overflow-hidden">
       <div className="relative  flex items-center justify-center">
         <Image
@@ -229,7 +219,6 @@ const LocationChart = memo(({ revenueByLocation }: { revenueByLocation: Location
           height={180}
           className=""
         />
-        {/* Location dots */}
         <div className="absolute top-10 left-8 w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
         <div className="absolute top-10 left-32 w-3 h-3 bg-blue-500 rounded-full animate-pulse delay-100"></div>
         <div className="absolute bottom-6 right-6 w-3 h-3 bg-blue-500 rounded-full animate-pulse delay-200"></div>
@@ -237,7 +226,6 @@ const LocationChart = memo(({ revenueByLocation }: { revenueByLocation: Location
       </div>
     </div>
 
-    {/* Location List */}
     <div className="space-y-4">
       {revenueByLocation.map((location) => (
         <div key={location.city} className="space-y-1 py-1">
@@ -251,7 +239,6 @@ const LocationChart = memo(({ revenueByLocation }: { revenueByLocation: Location
             </span>
           </div>
 
-          {/* Second line: Full-width progress bar */}
           <div className="w-full h-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-blue-500 to-blue-400 rounded-full transition-all duration-1000"
@@ -264,7 +251,6 @@ const LocationChart = memo(({ revenueByLocation }: { revenueByLocation: Location
   </div>
 ));
 
-// Products Table
 const ProductsTable = memo(({ topSellingProducts }: { topSellingProducts: ProductData[] }) => (
   <div className="bg-black/2 dark:bg-gray-800 rounded-3xl p-6">
     <h3 className="text-md font-semibold text-gray-900 dark:text-white mb-8">
@@ -297,15 +283,14 @@ const ProductsTable = memo(({ topSellingProducts }: { topSellingProducts: Produc
   </div>
 ));
 
-// Total Sales Chart using Recharts
 const TotalSalesChart = memo(({ totalSalesData }: { totalSalesData: SalesData[] }) => {
   const COLORS = ['#1C1C1C', '#95A4FC', '#BAEDBD', '#B1E3FF'];
 
-  const pieData = totalSalesData.map((item, index) => ({
-    name: item.label,
-    value: item.percentage,
-    color: COLORS[index]
-  }));
+  // const pieData = totalSalesData.map((item, index) => ({
+  //   name: item.label,
+  //   value: item.percentage,
+  //   color: COLORS[index]
+  // }));
 
   return (
     <div className="bg-black/2 dark:bg-gray-800 rounded-3xl p-6">
@@ -315,6 +300,22 @@ const TotalSalesChart = memo(({ totalSalesData }: { totalSalesData: SalesData[] 
 
       <div className="flex items-center justify-center mb-6">
         <div className="relative">
+          {/* <ResponsiveContainer width={160} height={160}>
+            <PieChart>
+              <Pie
+                data={pieData}
+                cx="50%"
+                cy="50%"
+                innerRadius={50}
+                outerRadius={80}
+                paddingAngle={2}
+                dataKey="value">
+                {pieData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer> */}
           <Image alt={"pieChart"} width={164} height={164} src={"/mains/01.svg"}/>
           <div className="absolute top-20 right-28 inset-0 flex items-center justify-center">
             <div className="text-center">
@@ -324,7 +325,6 @@ const TotalSalesChart = memo(({ totalSalesData }: { totalSalesData: SalesData[] 
         </div>
       </div>
 
-      {/* Legend */}
       <div className="mt-12 space-y-6">
         {totalSalesData.map((item, index) => (
           <div key={item.label} className="flex px-4 items-center justify-between">
@@ -347,9 +347,7 @@ const TotalSalesChart = memo(({ totalSalesData }: { totalSalesData: SalesData[] 
   );
 });
 
-// Main component
 const MainDashboard = memo(() => {
-  // Static data matching Figma design
   const statsData: StatData[] = [
     {
       title: "Customers",
@@ -406,9 +404,7 @@ const MainDashboard = memo(() => {
   return (
     <div>
       <div className="p-6 space-y-6">
-        {/* First Row: 4 Stats Cards in 2x2 + Projections Chart */}
         <div className="grid grid-cols-12 gap-6">
-          {/* Stats Cards - 2x2 Grid */}
           <div className="col-span-6">
             <div className="grid grid-cols-2 gap-4">
               {statsData.map((stat) => (
@@ -417,13 +413,11 @@ const MainDashboard = memo(() => {
             </div>
           </div>
 
-          {/* Projections Chart */}
           <div className="col-span-6">
             <ProjectionsChart />
           </div>
         </div>
 
-        {/* Second Row: Revenue Chart + Revenue by Location */}
         <div className="grid grid-cols-12 gap-6">
           <div className="col-span-9 flex-col">
             <RevenueChart />
@@ -433,7 +427,6 @@ const MainDashboard = memo(() => {
           </div>
         </div>
 
-        {/* Third Row: Top Selling Products + Total Sales */}
         <div className="grid grid-cols-12 gap-6">
           <div className="col-span-9 flex-col h-full">
             <ProductsTable topSellingProducts={topSellingProducts} />
