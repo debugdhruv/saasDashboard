@@ -9,7 +9,7 @@ import MainDashboard from "@/components/MainDashboard";
 export default function HomePage() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
+  const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(true);
 
   return (
     <div className={isDarkMode ? 'dark' : ''}>

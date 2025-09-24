@@ -230,10 +230,10 @@ const LocationChart = memo(({ revenueByLocation }: { revenueByLocation: Location
           className=""
         />
         {/* Location dots */}
-        <div className="absolute top-6 left-16 w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-        <div className="absolute top-8 left-32 w-2 h-2 bg-blue-500 rounded-full animate-pulse delay-100"></div>
-        <div className="absolute bottom-8 right-24 w-2 h-2 bg-blue-500 rounded-full animate-pulse delay-200"></div>
-        <div className="absolute top-4 right-20 w-2 h-2 bg-blue-500 rounded-full animate-pulse delay-300"></div>
+        <div className="absolute top-10 left-8 w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
+        <div className="absolute top-10 left-32 w-3 h-3 bg-blue-500 rounded-full animate-pulse delay-100"></div>
+        <div className="absolute bottom-6 right-6 w-3 h-3 bg-blue-500 rounded-full animate-pulse delay-200"></div>
+        <div className="absolute top-16 right-24 w-3 h-3 bg-blue-500 rounded-full animate-pulse delay-300"></div>
       </div>
     </div>
 
@@ -267,11 +267,11 @@ const LocationChart = memo(({ revenueByLocation }: { revenueByLocation: Location
 // Products Table
 const ProductsTable = memo(({ topSellingProducts }: { topSellingProducts: ProductData[] }) => (
   <div className="bg-black/2 dark:bg-gray-800 rounded-3xl p-6">
-    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
+    <h3 className="text-md font-semibold text-gray-900 dark:text-white mb-8">
       Top Selling Products
     </h3>
-    <div className="space-y-1">
-      <div className="grid grid-cols-4 gap-4 text-xs font-medium text-gray-500 dark:text-gray-400 pb-3 border-b border-gray-200 dark:border-gray-700">
+    <div className="space-y-3">
+      <div className="grid grid-cols-4 gap-4 text-sm font-medium text-gray-500 dark:text-gray-400 pb-3 border-b border-gray-200 dark:border-gray-700">
         <span>Name</span>
         <span>Price</span>
         <span>Quantity</span>
@@ -299,7 +299,7 @@ const ProductsTable = memo(({ topSellingProducts }: { topSellingProducts: Produc
 
 // Total Sales Chart using Recharts
 const TotalSalesChart = memo(({ totalSalesData }: { totalSalesData: SalesData[] }) => {
-  const COLORS = ['#000000', '#22C55E', '#3B82F6', '#F59E0B'];
+  const COLORS = ['#1C1C1C', '#95A4FC', '#BAEDBD', '#B1E3FF'];
 
   const pieData = totalSalesData.map((item, index) => ({
     name: item.label,
@@ -309,44 +309,25 @@ const TotalSalesChart = memo(({ totalSalesData }: { totalSalesData: SalesData[] 
 
   return (
     <div className="bg-black/2 dark:bg-gray-800 rounded-3xl p-6">
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
+      <h3 className="text-md font-semibold text-gray-900 dark:text-white mb-6">
         Total Sales
       </h3>
 
       <div className="flex items-center justify-center mb-6">
         <div className="relative">
-          <ResponsiveContainer width={160} height={160}>
-            <PieChart>
-              <Pie
-                data={pieData}
-                cx="50%"
-                cy="50%"
-                innerRadius={50}
-                outerRadius={80}
-                paddingAngle={3}
-                dataKey="value"
-                stroke="white"          // white gap separator
-                strokeWidth={4}
-                cornerRadius={10}
-              >
-                {pieData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
-          <div className="absolute inset-0 flex items-center justify-center">
+          <Image alt={"pieChart"} width={164} height={164} src={"/mains/01.svg"}/>
+          <div className="absolute top-20 right-28 inset-0 flex items-center justify-center">
             <div className="text-center">
-              <div className="text-xl font-bold text-gray-900 dark:text-white">38.6%</div>
+              <div className="text-md p-2 bg-black/70 backdrop-blur-2xl rounded-xl font-bold text-white dark:text-gray-900">38.6%</div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Legend */}
-      <div className="space-y-3">
+      <div className="mt-12 space-y-6">
         {totalSalesData.map((item, index) => (
-          <div key={item.label} className="flex items-center justify-between">
+          <div key={item.label} className="flex px-4 items-center justify-between">
             <div className="flex items-center gap-2">
               <div
                 className="w-3 h-3 rounded-full"
@@ -443,22 +424,22 @@ const MainDashboard = memo(() => {
         </div>
 
         {/* Second Row: Revenue Chart + Revenue by Location */}
-        <div className="grid grid-cols-16 gap-6">
-          <div className="col-span-12 flex-col">
+        <div className="grid grid-cols-12 gap-6">
+          <div className="col-span-9 flex-col">
             <RevenueChart />
           </div>
-          <div className="col-span-4 flex-col">
+          <div className="col-span-3 flex-col">
             <LocationChart revenueByLocation={revenueByLocation} />
           </div>
         </div>
 
         {/* Third Row: Top Selling Products + Total Sales */}
-        <div className="grid grid-cols-16 gap-6">
-          <div className="col-span-4 flex-col h-full">
-            <TotalSalesChart totalSalesData={totalSalesData} />
-          </div>
-          <div className="col-span-12 flex-col h-full">
+        <div className="grid grid-cols-12 gap-6">
+          <div className="col-span-9 flex-col h-full">
             <ProductsTable topSellingProducts={topSellingProducts} />
+          </div>
+          <div className="col-span-3 flex-col h-full">
+            <TotalSalesChart totalSalesData={totalSalesData} />
           </div>
         </div>
       </div>
